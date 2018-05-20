@@ -530,10 +530,10 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         private func configureConstraints() {
             if let underline = underlineView {
                 underline.translatesAutoresizingMaskIntoConstraints = false
-                underline.heightAnchor.constraint(equalToConstant: 3.0).isActive = true
+                underline.heightAnchor.constraint(equalToConstant: 4.0).isActive = true
                 underline.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
                 underline.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-                underline.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+                underline.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3.0).isActive = true
             }
         }
         
