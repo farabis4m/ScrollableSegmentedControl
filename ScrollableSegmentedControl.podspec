@@ -1,12 +1,11 @@
 Pod::Spec.new do |s|
   s.name = 'ScrollableSegmentedControl'
-  s.version = '1.3.0'
+  s.version = '1.4.0'
   s.license = 'MIT'
   s.summary = 'Scrollable Segmented Control for when UISegmentedControl is not sufficient'
-  s.homepage = 'https://github.com/GocePetrovski/ScrollableSegmentedControl'
-  s.social_media_url = 'http://twitter.com/GocePetrovski'
-  s.authors = { 'Goce Petrovski' => 'goce.petrovski@gmail.com' }
-  s.source = { :git => 'https://github.com/GocePetrovski/ScrollableSegmentedControl.git', :tag => s.version }
+  s.homepage = 'https://github.com/farabis4m/ScrollableSegmentedControl'
+  s.authors = { 'Abdulla Kunhi' => 'abdulla@farabi.ae' }
+  s.source = { :git => 'https://github.com/farabis4m/ScrollableSegmentedControl.git', :tag => s.version }
 
   s.platform = :ios, '9.0'
 
