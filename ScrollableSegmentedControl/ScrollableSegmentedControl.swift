@@ -54,9 +54,16 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         }
     }
     
-    override public var tintColor: UIColor! {
+    override public var tintColor: UIColor? {
         didSet {
             collectionView?.tintColor = tintColor
+            reloadSegments()
+        }
+    }
+    
+    public var underlineColor: UIColor = UIColor(red: 151/255.0, green: 151/255.0, blue: 151/255.0, alpha: 1.0) {
+        didSet {
+            collectionView?.tintColor = underlineColor
             reloadSegments()
         }
     }
@@ -223,7 +230,7 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
      
      Set this property to -1 to turn off the current selection.
      */
-    @objc public var selectedSegmentIndex: Int = -1 {
+    @objc public var selectedSegmentIndex: Int = 0 {
         didSet{
             if selectedSegmentIndex < -1 {
                 selectedSegmentIndex = -1
@@ -250,7 +257,7 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
      Configure if the selected segment should have underline. Default value is false.
      */
     @IBInspectable
-    @objc public var underlineSelected:Bool = false
+    @objc public var underlineSelected:Bool = true
     
     // MARK: - Layout management
     
@@ -279,13 +286,14 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         
         collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
         collectionView!.tag = 1
-        collectionView!.tintColor = tintColor
+        collectionView!.tintColor = underlineColor
         collectionView!.register(TextOnlySegmentCollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewController.textOnlyCellIdentifier)
         collectionViewController = CollectionViewController(segmentedControl: self)
         collectionView!.dataSource = collectionViewController
         collectionView!.delegate = collectionViewController
         collectionView!.backgroundColor = UIColor.clear
         collectionView!.showsHorizontalScrollIndicator = false
+        backgroundColor = UIColor(red: 0/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
         addSubview(collectionView!)
     }
     
@@ -423,12 +431,12 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
             
             segmentCell.showUnderline = segmentedControl.underlineSelected
             if segmentedControl.underlineSelected {
-                segmentCell.tintColor = segmentedControl.tintColor
+                segmentCell.tintColor = segmentedControl.underlineColor
             }
             
             
-            segmentCell.contentColor = segmentedControl.segmentContentColor
-            segmentCell.selectedContentColor = segmentedControl.selectedSegmentContentColor
+            segmentCell.contentColor = segmentedControl.segmentContentColor ?? .white
+            segmentCell.selectedContentColor = segmentedControl.selectedSegmentContentColor ?? .white
             
             segmentCell.normalAttributedTitle = data.normalAttributedTitle
             segmentCell.highlightedAttributedTitle = data.highlightedAttributedTitle
