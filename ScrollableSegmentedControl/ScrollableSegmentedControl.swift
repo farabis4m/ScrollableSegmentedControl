@@ -410,6 +410,7 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
             case .textOnly:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewController.textOnlyCellIdentifier, for: indexPath) as! TextOnlySegmentCollectionViewCell
                 cell.titleLabel.text = data.title
+                cell.titleLabel.accessibilityIdentifier = "Segment-\(indexPath.row)"
                 segmentCell = cell
             case .imageOnly:
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewController.imageOnlyCellIdentifier, for: indexPath) as! ImageOnlySegmentCollectionViewCell
