@@ -23,6 +23,8 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
     private var collectionViewController:CollectionViewController?
     private var segmentsData = [SegmentData]()
     private var longestTextWidth:CGFloat = 10
+    var segmentTextsWidth = [CGFloat]()
+    
     
     @objc public var segmentStyle:ScrollableSegmentedControlSegmentStyle = .textOnly {
         didSet {
@@ -37,8 +39,7 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
                 case .imageOnLeft:
                     collectionView?.register(ImageOnLeftSegmentCollectionViewCell.self, forCellWithReuseIdentifier: CollectionViewController.imageOnLeftCellIdentifier)
                 }
-                
-                let indexPath = collectionView?.indexPathsForSelectedItems?.last
+                let indexPath =  collectionView?.indexPathsForSelectedItems?.last
                 
                 setNeedsLayout()
                 flowLayout.invalidateLayout()
@@ -67,6 +68,8 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
             reloadSegments()
         }
     }
+    
+    public var isRTL = false
     
     fileprivate var _segmentContentColor:UIColor?
     @objc public dynamic var segmentContentColor:UIColor? {
@@ -271,7 +274,6 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         configureSegmentSize()
         
         flowLayout.invalidateLayout()
-        
         reloadSegments()
     }
     
@@ -283,7 +285,6 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        
         collectionView = UICollectionView(frame: frame, collectionViewLayout: flowLayout)
         collectionView!.tag = 1
         collectionView!.tintColor = underlineColor
@@ -329,7 +330,8 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         }
         
         let size = (text as NSString).size(withAttributes: fontAttributes)
-        let newLongestTextWidth = 2.0 + size.width + BaseSegmentCollectionViewCell.textPadding * 2
+        let newLongestTextWidth = 20.0 + size.width + BaseSegmentCollectionViewCell.textPadding
+        segmentTextsWidth.append(newLongestTextWidth)
         if newLongestTextWidth > longestTextWidth {
             longestTextWidth = newLongestTextWidth
             configureSegmentSize()
@@ -400,6 +402,25 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         
         fileprivate func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return segmentedControl.numberOfSegments
+        }
+        
+        func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            var width = CGFloat()
+            
+            switch segmentedControl.segmentStyle {
+            case .imageOnLeft:
+                width = segmentedControl.longestTextWidth + BaseSegmentCollectionViewCell.imageSize + BaseSegmentCollectionViewCell.imageToTextMargin * 2
+            default:
+                if collectionView.frame.size.width > segmentedControl.longestTextWidth * CGFloat(segmentedControl.segmentsData.count) {
+                    width = collectionView.frame.size.width / CGFloat(segmentedControl.segmentsData.count)
+                } else if segmentedControl.isRTL {
+                    width = segmentedControl.longestTextWidth - 10
+                } else {
+                    width = segmentedControl.segmentTextsWidth[indexPath.row]
+                }
+            }
+            
+            return CGSize(width: width, height: collectionView.frame.size.height)
         }
         
         fileprivate func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -484,7 +505,7 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
     // MARK: - SegmentCollectionViewCell
     
     private class BaseSegmentCollectionViewCell: UICollectionViewCell {
-        static let textPadding:CGFloat = 8.0
+        static let textPadding:CGFloat = 9.0
         static let imageToTextMargin:CGFloat = 14.0
         static let imageSize:CGFloat = 14.0
         static let defaultFont = UIFont.systemFont(ofSize: 14)
