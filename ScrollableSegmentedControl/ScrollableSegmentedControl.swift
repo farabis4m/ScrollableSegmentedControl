@@ -330,7 +330,11 @@ public enum ScrollableSegmentedControlSegmentStyle: Int {
         }
         
         let size = (text as NSString).size(withAttributes: fontAttributes)
-        let newLongestTextWidth = 20.0 + size.width + BaseSegmentCollectionViewCell.textPadding
+        
+        var newLongestTextWidth = 20.0 + size.width + BaseSegmentCollectionViewCell.textPadding * 2
+        if isRTL {
+            newLongestTextWidth = 20.0 + size.width + BaseSegmentCollectionViewCell.textPadding
+        }
         segmentTextsWidth.append(newLongestTextWidth)
         if newLongestTextWidth > longestTextWidth {
             longestTextWidth = newLongestTextWidth
